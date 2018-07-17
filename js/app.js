@@ -38,42 +38,42 @@ function init() {
      var feedUrl = allFeeds[id].url,
          feedName = allFeeds[id].name;
 
-     $.ajax({
-       type: "POST",
-       url: 'https://rsstojson.udacity.com/parseFeed',
-       data: JSON.stringify({url: feedUrl}),
-       contentType:"application/json",
-       success: function (result, status){
-
-                 var container = $('.feed'),
-                     title = $('.header-title'),
-                     entries = result.feed.entries,
-                     entriesLen = entries.length,
-                     entryTemplate = Handlebars.compile($('.tpl-entry').html());
-
-                 title.html(feedName);   // 设置 header
-                 container.empty();      // 将之前的所有内容置空
-
-                 /* 遍历所有我们通过 Google Feed Reader API 加载的条目，然后用
-                  * entryTemplate （上面用 Handerbars 创建的）解析每个条目。然后
-                  * 把转换得到的 HTML 添加到页面上的条目列表。
-                 */
-                 entries.forEach(function(entry) {
-                     container.append(entryTemplate(entry));
-                 });
-
-                 if (cb) {
-                     cb();
-                 }
-               },
-       error: function (result, status, err){
-                 // 如果有错，就不解析结果而是只运行回调函数。
-                 if (cb) {
-                     cb();
-                 }
-               },
-       dataType: "json"
-     });
+     // $.ajax({
+     //   type: "POST",
+     //   url: 'https://rsstojson.udacity.com/parseFeed',
+     //   data: JSON.stringify({url: feedUrl}),
+     //   contentType:"application/json",
+     //   success: function (result, status){
+     //
+     //             var container = $('.feed'),
+     //                 title = $('.header-title'),
+     //                 entries = result.feed.entries,
+     //                 entriesLen = entries.length,
+     //                 entryTemplate = Handlebars.compile($('.tpl-entry').html());
+     //
+     //             title.html(feedName);   // 设置 header
+     //             container.empty();      // 将之前的所有内容置空
+     //
+     //             /* 遍历所有我们通过 Google Feed Reader API 加载的条目，然后用
+     //              * entryTemplate （上面用 Handerbars 创建的）解析每个条目。然后
+     //              * 把转换得到的 HTML 添加到页面上的条目列表。
+     //             */
+     //             entries.forEach(function(entry) {
+     //                 container.append(entryTemplate(entry));
+     //             });
+     //
+     //             if (cb) {
+     //                 cb();
+     //             }
+     //           },
+     //   error: function (result, status, err){
+     //             // 如果有错，就不解析结果而是只运行回调函数。
+     //             if (cb) {
+     //                 cb();
+     //             }
+     //           },
+     //   dataType: "json"
+     // });
  }
 
 /* Google API: 加载 Feed Reader API 和定义当加载结束之后调用什么函数。*/
