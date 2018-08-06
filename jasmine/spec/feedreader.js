@@ -95,6 +95,9 @@ $(function() {
 
 
     /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
+    // reference：
+    // https://blog.csdn.net/mogoweb/article/details/55189783
+    // http://keenwon.com/1223.html
     describe("Initial Entries",function () {
         /* TODO:
          * 写一个测试保证 loadFeed 函数被调用而且工作正常，即在 .feed 容器元素
@@ -103,6 +106,42 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
+
+        describe("Jasmine 异步测试演示", function() {
+            var value;
+
+            beforeEach(function(done) {
+                setTimeout(function() {
+                    value = 0;
+                    done();
+                }, 1);
+            });
+
+            it("should support async execution of test preparation and expectations", function(done) {
+                value++;
+                expect(value).toBeGreaterThan(0);
+                done();
+            });
+
+            describe("5秒钟", function() {
+                var originalTimeout;
+                beforeEach(function() {
+                    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+                    jasmine.DEFAULT_TIMEOUT_INTERVAL = 6000;
+                });
+
+                it("takes a long time", function(done) {
+                    setTimeout(function() {
+                        done();
+                    }, 5000);
+                });
+
+                afterEach(function() {
+                    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+                });
+            });
+        });
+
     })
 
 
