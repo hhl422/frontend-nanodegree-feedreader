@@ -58,11 +58,6 @@ $(function() {
          * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
-        beforeEach(function () {
-            console.log($('body'));
-            console.log($('body').attr("class"));
-        })
-
         it("menu is hidden default",function () {
             expect($('body').attr("class")).toContain("menu-hidden");
         })
@@ -95,9 +90,6 @@ $(function() {
 
 
     /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
-    // reference：
-    // https://blog.csdn.net/mogoweb/article/details/55189783
-    // http://keenwon.com/1223.html
     describe("Initial Entries",function () {
         /* TODO:
          * 写一个测试保证 loadFeed 函数被调用而且工作正常，即在 .feed 容器元素
@@ -106,42 +98,16 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
-
-        describe("Jasmine 异步测试演示", function() {
-            var value;
-
-            beforeEach(function(done) {
-                setTimeout(function() {
-                    value = 0;
-                    done();
-                }, 1);
-            });
-
-            it("should support async execution of test preparation and expectations", function(done) {
-                value++;
-                expect(value).toBeGreaterThan(0);
+        beforeEach(function(done) {
+            loadFeed(0, function () {
                 done();
-            });
-
-            describe("5秒钟", function() {
-                var originalTimeout;
-                beforeEach(function() {
-                    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-                    jasmine.DEFAULT_TIMEOUT_INTERVAL = 6000;
-                });
-
-                it("takes a long time", function(done) {
-                    setTimeout(function() {
-                        done();
-                    }, 5000);
-                });
-
-                afterEach(function() {
-                    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-                });
             });
         });
 
+        it(".feed should contain one .entry at least", function(done) {
+            expect($('.feed').children(".entry")).not.toBeNull();
+            done();
+        });
     })
 
 
@@ -151,6 +117,25 @@ $(function() {
                  * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
                  * 记住，loadFeed() 函数是异步的。
                  */
+        var origin = $('.feed').html();
+        var originalTimeout;
+        beforeEach(function(done) {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+            loadFeed(1, function () {
+                done();
+            });
+        });
+
+        it("content changes after loadFeed", function(done) {
+            var update = $('.feed').html()
+            expect(origin).not.toEqual(update);
+            done();
+        });
+
+        afterEach(function() {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+        });
     })
 
 }());

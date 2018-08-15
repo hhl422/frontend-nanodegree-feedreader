@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bc74036b-917d-4492-a04d-7fdf1dae2720" name="Localhost" url="http://172.18.252.54">
+        <fileTransfer port="0" mountedRoot="F:\@hehongli\Udacity\GitHub\frontend-nanodegree-feedreader" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
