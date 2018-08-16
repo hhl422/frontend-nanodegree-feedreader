@@ -28,8 +28,9 @@ $(function() {
         var testUrlFunc = function(i) {
             it('url exists', function() {
                 var entry = allFeeds[i]
-                expect(entry.url).not.toBeNull();
+                // expect(entry.url).not.toBeNull();
                 expect(entry.url).toBeDefined();
+                expect(entry.url.length).not.toBe(0);//排除空字符串
             })
         }
         for (var i = 0; i < allFeeds.length; i++) {
@@ -43,7 +44,7 @@ $(function() {
             it('name exists', function() {
                 var entry = allFeeds[i]
                 expect(entry.name).not.toBeNull();
-                expect(entry.name).toBeDefined();
+                expect(entry.name.length).not.toBe(0);
             })
         }
         for (var i = 0; i < allFeeds.length; i++) {
@@ -59,7 +60,8 @@ $(function() {
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
         it("menu is hidden default",function () {
-            expect($('body').attr("class")).toContain("menu-hidden");
+            // expect($('body').attr("class")).toContain("menu-hidden");
+            expect($('body').hasClass("menu-hidden")).toBe(true);
         })
 
         /* TODO:
@@ -70,9 +72,11 @@ $(function() {
         var testToggleFunc = function(){
             it("menu toggle when clicked",function () {
                 if(times%2==1){
-                    expect($('body').attr("class")).not.toContain("menu-hidden");
+                    // expect($('body').attr("class")).not.toContain("menu-hidden");
+                    expect($('body').hasClass("menu-hidden")).toBe(false);
                 }else {
-                    expect($('body').attr("class")).toContain("menu-hidden");
+                    // expect($('body').attr("class")).toContain("menu-hidden");
+                    expect($('body').hasClass("menu-hidden")).toBe(true);
                 }
             })
         }
@@ -99,14 +103,11 @@ $(function() {
          * 和异步的 done() 函数。
          */
         beforeEach(function(done) {
-            loadFeed(0, function () {
-                done();
-            });
+            loadFeed(0, done);
         });
 
-        it(".feed should contain one .entry at least", function(done) {
+        it(".feed should contain one .entry at least", function() {
             expect($('.feed').children(".entry")).not.toBeNull();
-            done();
         });
     })
 
@@ -117,19 +118,20 @@ $(function() {
                  * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
                  * 记住，loadFeed() 函数是异步的。
                  */
-        var origin = $('.feed').html();
+        var setp1,setp2 ;
         var originalTimeout;
         beforeEach(function(done) {
             originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
             loadFeed(1, function () {
-                done();
+                step1 = $('.feed').html();
+               loadFeed(2,done)
             });
         });
 
         it("content changes after loadFeed", function(done) {
-            var update = $('.feed').html()
-            expect(origin).not.toEqual(update);
+            step2 = $('.feed').html()
+            expect(step1).not.toEqual(step2);
             done();
         });
 
